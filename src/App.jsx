@@ -1,11 +1,19 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
-import Page from "./pages/Page";
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router";
+import CreateCategory from "./pages/category/CreateCategory";
 
 const App = () => {
   return (
     <div>
-      <Page />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="/create-category" element={<CreateCategory />} />
+            <Route path="/all-category" element={"all category"} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };

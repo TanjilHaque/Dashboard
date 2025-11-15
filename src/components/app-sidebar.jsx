@@ -59,83 +59,70 @@ const data = {
       items: [
         {
           title: "Create Category",
-          url: "#",
+          url: "create-category",
         },
         {
-          title: "Get All Category",
-          url: "#",
-        },
-        {
-          title: "Upadate Category",
-          url: "#",
-        },
-        {
-          title: "Delete Category",
+          title: "All Category",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Sub-Category",
       url: "#",
       icon: Bot,
       items: [
         {
-          title: "Genesis",
+          title: "Create Sub-Category",
           url: "#",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "All Sub-Category",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Brand",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
+          title: "Create Brand",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "All Brand",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Product",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
+          title: "Create Product",
           url: "#",
         },
         {
-          title: "Team",
+          title: "All Product",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Variant",
+      url: "#",
+      icon: Settings2,
+      items: [
+        {
+          title: "Create Variant",
           url: "#",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "All Variant",
           url: "#",
         },
       ],
