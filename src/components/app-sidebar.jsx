@@ -52,6 +52,22 @@ const data = {
   ],
   navMain: [
     {
+      title: "Banner",
+      url: "#",
+      icon: SquareTerminal,
+      isActive: true,
+      items: [
+        {
+          title: "Create Banner",
+          url: "create-banner",
+        },
+        {
+          title: "All Banner",
+          url: "all-banner",
+        },
+      ],
+    },
+    {
       title: "Category",
       url: "#",
       icon: SquareTerminal,
@@ -63,7 +79,7 @@ const data = {
         },
         {
           title: "All Category",
-          url: "#",
+          url: "all-category",
         },
       ],
     },
