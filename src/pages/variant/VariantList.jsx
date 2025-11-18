@@ -5,72 +5,136 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router";
 
+// Dummy data
 const rows = [
   {
     id: 1,
-    dateAdded: "Snow",
-    name: "Jon",
-    image: "/finsweet.jpeg",
+    variantName: "Red Hoodie",
+    size: "L",
+    color: ["Red"],
+    retailPrice: 1200,
+    wholeSalePrice: 950,
+    stockVariant: 20,
+    alertVariantStock: 5,
+    isActive: true,
+    image: [{ url: "/hoodie.png" }],
   },
   {
     id: 2,
-    dateAdded: "Lannister",
-    name: "Cersei",
-    image: "/ps5.png",
+    variantName: "Blue T-shirt",
+    size: "M",
+    color: ["Blue"],
+    retailPrice: 500,
+    wholeSalePrice: 350,
+    stockVariant: 12,
+    alertVariantStock: 3,
+    isActive: false,
+    image: [{ url: "/tshirt.png" }],
   },
   {
     id: 3,
-    dateAdded: "Lannister",
-    name: "Jaime",
-    image: "/xboxs.png",
+    variantName: "Black Cap",
+    size: "Free",
+    color: ["Black"],
+    retailPrice: 250,
+    wholeSalePrice: 150,
+    stockVariant: 50,
+    alertVariantStock: 10,
+    isActive: true,
+    image: [{ url: "/cap.png" }],
   },
-  {
-    id: 4,
-    dateAdded: "Stark",
-    name: "Arya",
-    image: "/finsweet.jpeg",
-  },
-  {
-    id: 5,
-    dateAdded: "Targaryen",
-    name: "Daenerys",
-    image: "/ps5.png",
-  },
-  {
-    id: 6,
-    dateAdded: "Melisandre",
-    name: null,
-    image: "/xboxs.png",
-  },
-  { id: 7, dateAdded: "Clifford", name: "Ferrara" },
-  { id: 8, dateAdded: "Frances", name: "Rossini" },
-  { id: 9, dateAdded: "Roxie", name: "Harvey" },
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function CategoryList() {
+export default function VariantList() {
   const navigate = useNavigate();
+
   const handleEdit = (row) => {
-    console.log("Edit clicked for:", row);
-    navigate(`/edit-category/${row.id}`, { state: row });
+    console.log("Edit Variant:", row);
+    navigate(`/edit-variant/${row.id}`, { state: row });
   };
 
   const handleDelete = (row) => {
-    console.log("Delete clicked for:", row);
+    console.log("Delete Variant:", row);
   };
 
   const columns = [
-    { field: "id", headerName: "Serial", width: 170 },
-    { field: "name", headerName: "Name", width: 150 },
-    { field: "dateAdded", headerName: "Date Added", width: 150 },
+    { field: "id", headerName: "Serial", width: 80 },
+
+    {
+      field: "variantName",
+      headerName: "Variant Name",
+      width: 180,
+    },
+
+    {
+      field: "size",
+      headerName: "Size",
+      width: 120,
+    },
+
+    {
+      field: "color",
+      headerName: "Color(s)",
+      width: 150,
+      renderCell: (params) => params.row.color.join(", "),
+    },
+
+    {
+      field: "retailPrice",
+      headerName: "Retail Price",
+      width: 140,
+      type: "number",
+    },
+
+    {
+      field: "wholeSalePrice",
+      headerName: "Wholesale Price",
+      width: 160,
+      type: "number",
+    },
+
+    {
+      field: "stockVariant",
+      headerName: "Stock",
+      width: 120,
+      type: "number",
+    },
+
+    {
+      field: "alertVariantStock",
+      headerName: "Stock Alert",
+      width: 150,
+      type: "number",
+    },
+
+    {
+      field: "isActive",
+      headerName: "Status",
+      width: 120,
+      renderCell: (params) => (
+        <span
+          style={{
+            padding: "4px 8px",
+            borderRadius: "6px",
+            fontSize: "12px",
+            backgroundColor: params.row.isActive ? "#4caf50" : "#f44336",
+            color: "white",
+          }}
+        >
+          {params.row.isActive ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
+
     {
       field: "image",
       headerName: "Image",
-      width: 220,
+      width: 120,
       sortable: false,
       renderCell: (params) => {
-        const imageUrl = params.row.image;
+        const imgUrl = params.row.image?.[0]?.url;
 
         return (
           <div
@@ -86,10 +150,10 @@ export default function CategoryList() {
               background: "#f5f5f5",
             }}
           >
-            {imageUrl ? (
+            {imgUrl ? (
               <img
-                src={imageUrl}
-                alt="preview"
+                src={imgUrl}
+                alt="variant"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (
@@ -99,8 +163,9 @@ export default function CategoryList() {
         );
       },
     },
+
     {
-      field: "action",
+      field: "actions",
       headerName: "Action",
       width: 200,
       sortable: false,
@@ -131,7 +196,7 @@ export default function CategoryList() {
   ];
 
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
+    <Paper sx={{ height: 600, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -143,24 +208,18 @@ export default function CategoryList() {
           "& .MuiDataGrid-cell": {
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // centers text content only
+            justifyContent: "center",
             textAlign: "center",
           },
           "& .MuiDataGrid-columnHeader": {
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // centers text content only
+            justifyContent: "center",
             textAlign: "center",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             width: "100%",
             textAlign: "center",
-          },
-          "& .MuiDataGrid-columnHeaderDraggableContainer": {
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "fit-content",
           },
         }}
       />

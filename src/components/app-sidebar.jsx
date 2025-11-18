@@ -90,11 +90,11 @@ const data = {
       items: [
         {
           title: "Create Sub-Category",
-          url: "#",
+          url: "create-subCategory",
         },
         {
           title: "All Sub-Category",
-          url: "#",
+          url: "all-subCategory",
         },
       ],
     },
@@ -105,11 +105,11 @@ const data = {
       items: [
         {
           title: "Create Brand",
-          url: "#",
+          url: "create-brand",
         },
         {
           title: "All Brand",
-          url: "#",
+          url: "all-brand",
         },
       ],
     },
@@ -120,11 +120,11 @@ const data = {
       items: [
         {
           title: "Create Product",
-          url: "#",
+          url: "create-product",
         },
         {
           title: "All Product",
-          url: "#",
+          url: "all-product",
         },
       ],
     },
@@ -135,11 +135,11 @@ const data = {
       items: [
         {
           title: "Create Variant",
-          url: "#",
+          url: "create-variant",
         },
         {
           title: "All Variant",
-          url: "#",
+          url: "all-variant",
         },
       ],
     },

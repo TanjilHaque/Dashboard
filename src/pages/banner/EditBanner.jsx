@@ -13,51 +13,50 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 
 const EditBanner = () => {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+  const rowData = location.state; // row data from BannerList
+
+  console.log("Editing Banner ID:", id, "Row Data:", rowData);
+
   const handleBackBtn = () => {
-    console.log("handleBackBtn clicked");
-    naviagate("/all-banner");
+    navigate("/all-banner");
   };
-  // const form = useForm();
+
+  const fileInputRef = useRef(null);
+
   const formSchema = z.object({
-    title: z.string().min(2, {
-      message: "Title must be at least 2 characters.",
-    }),
-    image: z.any().refine((file) => file instanceof File, {
-      message: "Image is required",
-    }),
-    description: z.string().min(5, {
-      message: "Description has to be at least 5 characters.",
-    }),
+    title: z.string().min(2),
+    image: z.any(),
+    description: z.string().min(5),
     targetUrl: z.string(),
     targetType: z.string(),
-    priority: z
-      .number({ invalid_type_error: "Priority must be a number" })
-      .min(0, { message: "Priority cannot be negative" })
-      .refine((val) => val !== undefined, { message: "Priority is required" }),
+    priority: z.number(),
     startDate: z.date(),
     endDate: z.date(),
   });
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      image: null,
-      description: "",
-      targetUrl: "",
-      priority: "",
-      targetType: "Category",
-      startDate: new Date(),
-      endDate: new Date(),
-
-      // discount: 0,
+      title: rowData?.title || "",
+      description: rowData?.description || "",
+      targetUrl: rowData?.targetUrl || "",
+      priority: rowData?.priority || 0,
+      targetType: rowData?.targetType || "Category",
+      image: null, // file cannot be prefilled
+      startDate: rowData?.startDate ? new Date(rowData.startDate) : new Date(),
+      endDate: rowData?.endDate ? new Date(rowData.endDate) : new Date(),
     },
   });
-  const fileInputRef = useRef(null);
+
   function onSubmit(values) {
+    console.log("Banner submitted:", values);
+
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("description", values.description);
@@ -71,21 +70,24 @@ const EditBanner = () => {
       formData.append("image", values.image);
     }
 
-    console.log(values);
-    // axios.post("/api/category", formData)
+    // axios.patch(`/api/banner/${id}`, formData);
 
     form.reset();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   }
+
   return (
     <Form {...form}>
-      <div className="font-bold text-[32px] text-center">Edit Your Banner</div>
+      <div className="font-bold text-[32px] text-center">
+        Editing Banner #{id}
+      </div>
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="flex justify-evenly items-center gap-5 pt-20 max-md:block">
           <div className="flex flex-col gap-[30px]">
-            {/*========================= Banner Title =========================*/}
+            {/* Banner Title */}
             <FormField
               control={form.control}
               name="title"
@@ -100,7 +102,8 @@ const EditBanner = () => {
                 </FormItem>
               )}
             />
-            {/*========================= Banner Description =========================*/}
+
+            {/* Banner Description */}
             <FormField
               control={form.control}
               name="description"
@@ -110,14 +113,13 @@ const EditBanner = () => {
                   <FormControl>
                     <Input placeholder="Banner Description..." {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your banner description.
-                  </FormDescription>
+                  <FormDescription>Your banner description.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*========================= Banner Image =========================*/}
+
+            {/* Banner Image */}
             <FormField
               control={form.control}
               name="image"
@@ -126,20 +128,19 @@ const EditBanner = () => {
                   <FormLabel>Banner Image</FormLabel>
                   <FormControl>
                     <Input
-                      ref={fileInputRef}
                       type="file"
                       accept="image/*"
+                      ref={fileInputRef}
                       onChange={(e) => field.onChange(e.target.files?.[0])}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Upload an optional banner image.
-                  </FormDescription>
+                  <FormDescription>Upload a banner image.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*========================= Banner TargetURL =========================*/}
+
+            {/* Banner Target URL */}
             <FormField
               control={form.control}
               name="targetUrl"
@@ -149,14 +150,15 @@ const EditBanner = () => {
                   <FormControl>
                     <Input placeholder="Target URL..." {...field} />
                   </FormControl>
-                  <FormDescription>This is your target url.</FormDescription>
+                  <FormDescription>Link for the banner.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+
           <div className="flex flex-col gap-[30px]">
-            {/*========================= Banner Priority =========================*/}
+            {/* Priority */}
             <FormField
               control={form.control}
               name="priority"
@@ -167,21 +169,20 @@ const EditBanner = () => {
                     <Input
                       type="number"
                       placeholder="Priority..."
-                      value={field.value ?? ""} // allow empty string
+                      value={field.value ?? ""}
                       onChange={(e) => {
                         const val = e.target.value;
                         field.onChange(val === "" ? undefined : Number(val));
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Give the priority of the banner.
-                  </FormDescription>
+                  <FormDescription>Higher means more visible.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*========================= Banner Target Type =========================*/}
+
+            {/* Target Type */}
             <FormField
               control={form.control}
               name="targetType"
@@ -191,12 +192,13 @@ const EditBanner = () => {
                   <FormControl>
                     <Input placeholder="Target Type..." {...field} />
                   </FormControl>
-                  <FormDescription>Target type of your banner.</FormDescription>
+                  <FormDescription>Category or Product.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*========================= Banner Start Date =========================*/}
+
+            {/* Start Date */}
             <FormField
               control={form.control}
               name="startDate"
@@ -214,12 +216,13 @@ const EditBanner = () => {
                       onChange={(e) => field.onChange(new Date(e.target.value))}
                     />
                   </FormControl>
-                  <FormDescription>Start Date for your banner.</FormDescription>
+                  <FormDescription>Start date of banner.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/*========================= Banner Target Type =========================*/}
+
+            {/* End Date */}
             <FormField
               control={form.control}
               name="endDate"
@@ -237,7 +240,7 @@ const EditBanner = () => {
                       onChange={(e) => field.onChange(new Date(e.target.value))}
                     />
                   </FormControl>
-                  <FormDescription>End date for your banner.</FormDescription>
+                  <FormDescription>End date of banner.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -246,12 +249,8 @@ const EditBanner = () => {
         </div>
 
         <div className="flex justify-around items-center">
-          <Button className="cursor-pointer" onClick={handleBackBtn}>
-            Back
-          </Button>
-          <Button className="cursor-pointer" type="submit">
-            Submit
-          </Button>
+          <Button onClick={handleBackBtn}>Back</Button>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
     </Form>

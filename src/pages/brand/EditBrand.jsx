@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useNavigate, useParams, useLocation } from "react-router";
 
-const EditCategory = () => {
+const EditBrand = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
@@ -25,11 +25,8 @@ const EditCategory = () => {
   const fileInputRef = useRef(null);
 
   const formSchema = z.object({
-    title: z.string().min(2),
+    name: z.string().min(2),
     image: z.any(),
-    description: z.string().min(5),
-    targetUrl: z.string(),
-    targetType: z.string(),
     startDate: z.date(),
     endDate: z.date(),
   });
@@ -37,11 +34,8 @@ const EditCategory = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: rowData?.name || "",
+      name: rowData?.name || "",
       image: null,
-      description: rowData?.dateAdded || "",
-      targetUrl: "",
-      targetType: "Category",
       startDate: new Date(),
       endDate: new Date(),
     },
@@ -51,8 +45,7 @@ const EditCategory = () => {
     console.log("Submitted values:", values);
 
     const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("description", values.description);
+    formData.append("title", values.name);
 
     if (values.image) {
       formData.append("image", values.image);
@@ -64,17 +57,17 @@ const EditCategory = () => {
   return (
     <Form {...form}>
       <div className="font-bold text-[32px] text-center">
-        Editing Category #{id}
+        Editing Brand #{id}
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {/* Title */}
         <FormField
           control={form.control}
-          name="title"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category Name</FormLabel>
+              <FormLabel>Brand Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -103,7 +96,7 @@ const EditCategory = () => {
         />
 
         <div className="flex justify-around items-center">
-          <Button onClick={() => navigate("/all-category")}>Back</Button>
+          <Button onClick={() => navigate("/all-brand")}>Back</Button>
           <Button type="submit">Submit</Button>
         </div>
       </form>
@@ -111,4 +104,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default EditBrand;

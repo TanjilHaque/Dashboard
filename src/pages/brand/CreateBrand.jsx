@@ -6,109 +6,100 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useNavigate, useParams, useLocation } from "react-router";
 
-const EditCategory = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const location = useLocation();
-  const rowData = location.state;
-
-  console.log("Editing row:", rowData);
-
-  const fileInputRef = useRef(null);
-
+const CreateBrand = () => {
+  // const form = useForm();
   const formSchema = z.object({
-    title: z.string().min(2),
-    image: z.any(),
-    description: z.string().min(5),
-    targetUrl: z.string(),
-    targetType: z.string(),
-    startDate: z.date(),
-    endDate: z.date(),
+    name: z.string().min(2, {
+      message: "Brand Name must be at least 2 characters.",
+    }),
+    image: z.any().optional(),
+    // discount: z
+    //   .number()
+    //   .min(0, {
+    //     message: "Discount cannot be less than 0%.",
+    //   })
+    //   .max(100, {
+    //     message: "Discount cannot be more than 100%",
+    //   }),
   });
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: rowData?.name || "",
+      name: "",
       image: null,
-      description: rowData?.dateAdded || "",
-      targetUrl: "",
-      targetType: "Category",
-      startDate: new Date(),
-      endDate: new Date(),
+      // discount: 0,
     },
   });
-
+  const fileInputRef = useRef(null);
   function onSubmit(values) {
-    console.log("Submitted values:", values);
-
     const formData = new FormData();
-    formData.append("title", values.title);
-    formData.append("description", values.description);
+    formData.append("name", values.name);
 
     if (values.image) {
       formData.append("image", values.image);
     }
+    // formData.append("discount", values.discount);
+
+    console.log(values);
+    // axios.post("/api/category", formData)
 
     form.reset();
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   }
-
   return (
     <Form {...form}>
-      <div className="font-bold text-[32px] text-center">
-        Editing Category #{id}
-      </div>
-
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Title */}
+        {/*========================= Brand Name =========================*/}
         <FormField
           control={form.control}
-          name="title"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category Name</FormLabel>
+              <FormLabel>Brand Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input placeholder="Brand Name..." {...field} />
               </FormControl>
+              <FormDescription>
+                This is your product brand name.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        {/* Image */}
+        {/*========================= Brand Image =========================*/}
         <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Brand Image</FormLabel>
               <FormControl>
                 <Input
-                  type="file"
                   ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
                   onChange={(e) => field.onChange(e.target.files?.[0])}
                 />
               </FormControl>
+              <FormDescription>Upload an optional brand image.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <div className="flex justify-around items-center">
-          <Button onClick={() => navigate("/all-category")}>Back</Button>
-          <Button type="submit">Submit</Button>
-        </div>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
 };
 
-export default EditCategory;
+export default CreateBrand;

@@ -59,7 +59,7 @@ export default function BannerList() {
   const navigate = useNavigate();
   const handleEdit = (row) => {
     console.log("Edit clicked for:", row);
-    navigate("/edit-banner");
+    navigate(`/edit-banner/${row.id}`, { state: row });
   };
 
   const handleDelete = (row) => {

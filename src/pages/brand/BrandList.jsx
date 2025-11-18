@@ -49,11 +49,11 @@ const rows = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function CategoryList() {
+export default function BrandList() {
   const navigate = useNavigate();
   const handleEdit = (row) => {
     console.log("Edit clicked for:", row);
-    navigate(`/edit-category/${row.id}`, { state: row });
+    navigate(`/edit-brand/${row.id}`, { state: row });
   };
 
   const handleDelete = (row) => {

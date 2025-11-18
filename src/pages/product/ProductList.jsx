@@ -5,69 +5,68 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router";
 
+// TEMP DUMMY DATA — replace with API data
 const rows = [
   {
     id: 1,
-    dateAdded: "Snow",
-    name: "Jon",
+    name: "iPhone 15",
+    category: "Phones",
+    price: 1200,
+    stock: 10,
     image: "/finsweet.jpeg",
   },
   {
     id: 2,
-    dateAdded: "Lannister",
-    name: "Cersei",
+    name: "PS5",
+    category: "Gaming",
+    price: 600,
+    stock: 25,
     image: "/ps5.png",
   },
   {
     id: 3,
-    dateAdded: "Lannister",
-    name: "Jaime",
+    name: "Xbox Series S",
+    category: "Gaming",
+    price: 500,
+    stock: 14,
     image: "/xboxs.png",
   },
-  {
-    id: 4,
-    dateAdded: "Stark",
-    name: "Arya",
-    image: "/finsweet.jpeg",
-  },
-  {
-    id: 5,
-    dateAdded: "Targaryen",
-    name: "Daenerys",
-    image: "/ps5.png",
-  },
-  {
-    id: 6,
-    dateAdded: "Melisandre",
-    name: null,
-    image: "/xboxs.png",
-  },
-  { id: 7, dateAdded: "Clifford", name: "Ferrara" },
-  { id: 8, dateAdded: "Frances", name: "Rossini" },
-  { id: 9, dateAdded: "Roxie", name: "Harvey" },
 ];
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function CategoryList() {
+export default function ProductList() {
   const navigate = useNavigate();
+
   const handleEdit = (row) => {
-    console.log("Edit clicked for:", row);
-    navigate(`/edit-category/${row.id}`, { state: row });
+    console.log("Edit Product:", row);
+    navigate(`/edit-product/${row.id}`, { state: row });
   };
 
   const handleDelete = (row) => {
-    console.log("Delete clicked for:", row);
+    console.log("Delete Product:", row);
   };
 
   const columns = [
-    { field: "id", headerName: "Serial", width: 170 },
-    { field: "name", headerName: "Name", width: 150 },
-    { field: "dateAdded", headerName: "Date Added", width: 150 },
+    { field: "id", headerName: "Serial", width: 100 },
+    { field: "name", headerName: "Name", width: 180 },
+    { field: "category", headerName: "Category", width: 150 },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 120,
+      type: "number",
+    },
+    {
+      field: "stock",
+      headerName: "Stock",
+      width: 120,
+      type: "number",
+    },
     {
       field: "image",
       headerName: "Image",
-      width: 220,
+      width: 120,
       sortable: false,
       renderCell: (params) => {
         const imageUrl = params.row.image;
@@ -100,7 +99,7 @@ export default function CategoryList() {
       },
     },
     {
-      field: "action",
+      field: "actions",
       headerName: "Action",
       width: 200,
       sortable: false,
@@ -131,7 +130,7 @@ export default function CategoryList() {
   ];
 
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
+    <Paper sx={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -143,24 +142,18 @@ export default function CategoryList() {
           "& .MuiDataGrid-cell": {
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // centers text content only
+            justifyContent: "center",
             textAlign: "center",
           },
           "& .MuiDataGrid-columnHeader": {
             display: "flex",
             alignItems: "center",
-            justifyContent: "center", // centers text content only
+            justifyContent: "center",
             textAlign: "center",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             width: "100%",
             textAlign: "center",
-          },
-          "& .MuiDataGrid-columnHeaderDraggableContainer": {
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "fit-content",
           },
         }}
       />
